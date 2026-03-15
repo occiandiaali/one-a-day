@@ -1,0 +1,48 @@
+[
+  {
+    "id": "science-001",
+    "topic": "Science",
+    "text": "Water boils at 100°C at sea level.",
+    "type": "truefalse",
+    "options": ["True", "False"],
+    "correct": "True",
+    "hint": "Think about standard atmospheric pressure.",
+    "links": ["https://en.wikipedia.org/wiki/Boiling_point"]
+  },
+  {
+    "id": "history-002",
+    "topic": "History",
+    "text": "Who was the first President of the United States?",
+    "type": "multiple",
+    "options": ["George Washington", "Thomas Jefferson", "Abraham Lincoln", "John Adams"],
+    "correct": "George Washington",
+    "hint": "He served from 1789 to 1797.",
+    "links": ["https://en.wikipedia.org/wiki/George_Washington"]
+  },    {    "id": "science-002",
+    "topic": "Science",
+    "text": "As at 2025, 229 people have won the Nobel prize in Physics. How many of them were female?",
+    "type": "multiple",
+    "options": [108, 0, 5],
+    "correct": 5,
+    "hint": "It's not zero.",
+    "links": ["https://en.wikipedia.org/wiki/List_of_Nobel_laureates_in_Physics"]
+  },  {
+    "id": "music-001",
+    "topic": "Music",
+    "text": "Who holds the record for the most Grammy awards won?",
+    "type": "multiple",
+    "options": ["Michael Jackson", "Alison Krauss", "Kendrick Lamar", "Beyonce"],
+    "correct": "Beyonce - 35(as at 2025)",
+    "hint": "It's actually a female.",
+    "links": ["https://en.wikipedia.org/wiki/Grammy_Award_milestones"]
+  },  {
+    "id": "history-001",
+    "topic": "History",
+    "text": "What is the longest war in human history?",
+    "type": "multiple",
+    "options": ["World War 1", "Reconquista", "Vietnam War", "World War 2"],
+    "correct": "George Washington",
+    "hint": "It involved religion",
+    "links": ["https://www.worldatlas.com/history/the-longest-wars-in-human-history.html"]
+  },
+]
