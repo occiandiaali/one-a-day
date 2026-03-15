@@ -44,7 +44,7 @@
     "text": "What is the longest war in human history?",
     "type": "multiple",
     "options": ["World War 1", "Reconquista", "Vietnam War", "World War 2"],
-    "correct": "George Washington",
+    "correct": "Reconquista",
     "hint": "It involved religion",
     "links": ["https://www.worldatlas.com/history/the-longest-wars-in-human-history.html"]
   },
