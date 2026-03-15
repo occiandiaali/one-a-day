@@ -60,84 +60,183 @@
 // setupCounter(document.querySelector('#counter'))
 
 import van from "vanjs-core";
-//import confetti from "https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js";
 
-const { div, h1, select, option, button, span } = van.tags;
+const { br, div, h1, img, select, option, button, span, fragment } = van.tags;
 
-const topic = van.state("Science");
+const topic = van.state(null); // no topic selected at start
 const question = van.state(null);
 const showHint = van.state(false);
 const showModal = van.state(false);
 const modalContent = van.state("");
-let triviaData = [];
+const incorrectMsg = van.state("");
+
+const triviaDataState = van.state([]); // reactive trivia data
 
 // Fetch trivia JSON from GitHub
 async function loadTrivia() {
   const res = await fetch(
     "https://raw.githubusercontent.com/occiandiaali/one-a-day/refs/heads/main/data.json",
   );
-  triviaData = await res.json();
-  loadQuestion();
+  const json = await res.json();
+  triviaDataState.val = json.data; // ✅ assign into state
 }
 
 function loadQuestion() {
-  const qset = triviaData.filter((q) => q.topic === topic.val);
+  const qset = triviaDataState.val.filter((q) => q.topic === topic.val);
   if (qset.length > 0) {
     question.val = qset[Math.floor(Math.random() * qset.length)];
     showHint.val = false;
     showModal.val = false;
+    //  console.log("Question set:", question.val);
   }
 }
 
 function checkAnswer(ans) {
   if (ans === question.val.correct) {
-    // confetti();
-    alert("Correct!");
+    // Speech synthesis
+    const utterance = new SpeechSynthesisUtterance("Yes! That's correct!");
+    speechSynthesis.speak(utterance);
+    confetti({
+      particleCount: 150,
+      spread: 70,
+      origin: { y: 0.6 },
+    });
+
+    incorrectMsg.val = ""; // clear any previous wrong message
+
+    modalContent.val = question.val.links
+      .map((l) => `<p><a href="${l}" target="_blank">${l}</a></p>`)
+      .join("");
+    showModal.val = true;
+  } else {
+    incorrectMsg.val = "Wrong answer!";
+    modalContent.val = question.val.links
+      .map((l) => `<p><a href="${l}" target="_blank">${l}</a></p>`)
+      .join("");
+    setTimeout(() => {
+      showModal.val = true;
+    }, 500);
   }
-  modalContent.val = question.val.links
-    .map((l) => `<p><a href="${l}" target="_blank">${l}</a></p>`)
-    .join("");
-  showModal.val = true;
+}
+
+function resetQuiz() {
+  topic.val = null;
+  question.val = null;
+  showHint.val = false;
+  showModal.val = false;
+  modalContent.val = "";
+  incorrectMsg.val = "";
 }
 
 export const MainPage = div(
-  h1("one-a-day"),
+  img({
+    src: "/oad-logo.svg",
+    alt: "one-a-day",
+    style: "width:50px; height:50px;margin-top:10%",
+  }),
+  h1({ class: "main-h1" }, "one-a-day"),
+  // ✅ Reset button only shows if a topic is selected
+  () =>
+    topic.val
+      ? button(
+          {
+            onclick: resetQuiz,
+            style:
+              "margin-top:5px; padding:6px 12px; background:#f8d7da; border:1px solid #721c24; border-radius:4px; cursor:pointer;",
+          },
+          "Reset",
+        )
+      : span(null),
+  br(),
   select(
     {
       onchange: (e) => {
         topic.val = e.target.value;
         loadQuestion();
       },
+      style: "width:120px;",
     },
+    // Default option (disabled)
+    option({ value: "", disabled: true, selected: true }, "Select a topic…"),
     () => {
-      const topics = [...new Set(triviaData.map((q) => q.topic))];
-      return topics.map((t) => option({ value: t }, t));
+      const topics = [...new Set(triviaDataState.val.map((q) => q.topic))];
+      // console.log("Dropdown topics:", topics);
+      return fragment(...topics.map((t) => option({ value: t }, t)));
     },
   ),
-  div(() => (question.val ? span(question.val.text) : span("Pick a topic!"))),
-  button({ onclick: () => (showHint.val = true) }, "💡 Hint"),
-  () =>
-    showHint.val && question.val ? div("Hint: " + question.val.hint) : null,
+
+  div(() =>
+    question.val
+      ? span({ style: "padding:12px" }, question.val.text)
+      : span("Pick a topic!"),
+  ),
   () =>
     question.val
-      ? div(
-          question.val.options.map((opt) =>
-            button({ onclick: () => checkAnswer(opt) }, opt),
+      ? fragment(
+          // Hint button
+          button(
+            {
+              onclick: () => (showHint.val = true),
+              style:
+                "margin:10px; padding:8px 12px; background:black;color:white; border: none; cursor:pointer;",
+            },
+            "💡 Hint",
           ),
+          // Hint text
+          showHint.val
+            ? div(
+                { style: "margin:10px; font-style:italic;" },
+                "Hint: " + question.val.hint,
+              )
+            : null,
+          // Answer options
+          div(
+            {
+              class: "answers",
+            },
+            ...question.val.options.map((opt) =>
+              button(
+                {
+                  onclick: () => checkAnswer(opt),
+                  style:
+                    "padding:8px 8px;margin:0 auto; background:#e0f7fa; border:1px solid #00796b; border-radius:4px; cursor:pointer;",
+                },
+                opt,
+              ),
+            ),
+          ),
+          // ✅ Incorrect message
+          () =>
+            incorrectMsg.val
+              ? div({ style: "color:red; margin-top:10px;" }, incorrectMsg.val)
+              : span(""),
         )
-      : null,
+      : span(""),
+
   () =>
     showModal.val
-      ? div(
-          {
-            style:
-              "position:fixed;top:20%;left:20%;background:#fff;padding:20px;border:1px solid #000;",
-          },
-          span("Learn more:"),
-          div({ innerHTML: modalContent.val }),
-          button({ onclick: () => (showModal.val = false) }, "Close"),
+      ? fragment(
+          // Overlay
+          div({
+            class: "overlay",
+            onclick: () => (showModal.val = false), // click overlay to close
+          }),
+
+          // Modal
+          div(
+            { class: "modal" },
+            span("Learn more:"),
+            div({ innerHTML: modalContent.val }),
+            button(
+              {
+                class: "modalCloseBtn",
+                onclick: () => (showModal.val = false),
+              },
+              "Close",
+            ),
+          ),
         )
-      : null,
+      : span(""),
 );
 
 // Load trivia on startup

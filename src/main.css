@@ -1,0 +1,20 @@
+.trivia-box {
+  border: 2px solid #333;
+  padding: 20px;
+  margin-top: 10px;
+  border-radius: 8px;
+  background: #fafafa;
+}
+
+.trivia-options button {
+  margin: 5px;
+  padding: 10px 15px;
+  border-radius: 6px;
+  border: none;
+  background: #eee;
+  cursor: pointer;
+}
+
+.trivia-options button:hover {
+  background: #ddd;
+}

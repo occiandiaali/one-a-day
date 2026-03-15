@@ -1,24 +1,13 @@
-<!-- <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>one-a-day</title>
-  </head>
-  <body>
-    <div id="app"></div>
-    <script type="module" src="/src/main.js"></script>
-  </body>
-</html> -->
-
 <!doctype html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type="image/svg+xml" href="/oad-logo.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>one-a-day</title>
+    <link rel="stylesheet" href="src/style.css" type="text/css" />
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+
     <script type="module">
       import van from "vanjs-core";
       import { MainPage } from "./src/main.js";
@@ -35,6 +24,7 @@
       });
 
       const NavBar = div(
+        { class: "nav-div" },
         a({ href: "#/main" }, "Home"),
         " | ",
         a({ href: "#/about" }, "About"),
@@ -59,5 +49,6 @@
       van.add(document.body, App);
     </script>
   </head>
-  <body style="font-family: Arial, Helvetica, sans-serif; margin: 20px"></body>
+  <!-- <body style="font-family: Arial, Helvetica, sans-serif; margin: 20px"></body> -->
+  <body></body>
 </html>
