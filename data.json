@@ -1,4 +1,5 @@
-[
+{ 
+  "data": [
   {
     "id": "science-001",
     "topic": "Science",
@@ -58,3 +59,4 @@
     "links": ["https://en.wikipedia.org/wiki/Singing"]
   },
 ]
+}
