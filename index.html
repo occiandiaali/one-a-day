@@ -1,0 +1,63 @@
+<!-- <!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>one-a-day</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html> -->
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>one-a-day</title>
+    <script type="module">
+      import van from "vanjs-core";
+      import { MainPage } from "./src/main.js";
+      import { AboutPage } from "./src/about.js";
+      import { PolicyPage } from "./src/policy.js";
+      import { DashboardPage } from "./src/dashboard.js";
+
+      const { div, a, span } = van.tags;
+      const route = van.state("main");
+
+      window.addEventListener("hashchange", () => {
+        const hash = location.hash.replace("#/", "");
+        route.val = hash || "main";
+      });
+
+      const NavBar = div(
+        a({ href: "#/main" }, "Home"),
+        " | ",
+        a({ href: "#/about" }, "About"),
+        " | ",
+        a({ href: "#/policy" }, "Policy"),
+        " | ",
+        a({ href: "#/dashboard" }, "Dashboard"),
+      );
+
+      const App = div(NavBar, () =>
+        route.val === "main"
+          ? MainPage
+          : route.val === "about"
+            ? AboutPage
+            : route.val === "policy"
+              ? PolicyPage
+              : route.val === "dashboard"
+                ? DashboardPage
+                : span("Page not found"),
+      );
+
+      van.add(document.body, App);
+    </script>
+  </head>
+  <body style="font-family: Arial, Helvetica, sans-serif; margin: 20px"></body>
+</html>
