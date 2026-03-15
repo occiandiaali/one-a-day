@@ -74,7 +74,7 @@ let triviaData = [];
 // Fetch trivia JSON from GitHub
 async function loadTrivia() {
   const res = await fetch(
-    "https://raw.githubusercontent.com/<username>/<repo>/main/data/trivia.json",
+    "https://raw.githubusercontent.com/occiandiaali/one-a-day/refs/heads/main/data.json",
   );
   triviaData = await res.json();
   loadQuestion();
@@ -141,4 +141,4 @@ export const MainPage = div(
 );
 
 // Load trivia on startup
-//loadTrivia();
+loadTrivia();
