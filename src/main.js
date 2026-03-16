@@ -61,8 +61,7 @@
 
 import van from "vanjs-core";
 
-const { br, div, h1, iframe, img, select, option, button, span, fragment } =
-  van.tags;
+const { br, div, h1, img, select, option, button, span, fragment } = van.tags;
 
 const topic = van.state(null); // no topic selected at start
 const question = van.state(null);
